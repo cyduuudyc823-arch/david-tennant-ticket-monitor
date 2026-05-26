@@ -1,0 +1,17 @@
+{
+  "name": "david-tennant-ticket-monitor",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node src/check.js",
+    "build": "node src/build-site.js",
+    "notify": "node src/notify.js",
+    "should-run": "node src/should-run.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.52.0"
+  },
+  "devDependencies": {}
+}

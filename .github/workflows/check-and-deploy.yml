@@ -2,6 +2,15 @@ name: Check tickets and deploy site
 
 on:
   workflow_dispatch:
+    inputs:
+      test_notification:
+        description: "Send a test ntfy notification"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
   schedule:
     - cron: "0 */8 * * *"
     - cron: "0 * 8-15 6 *"
@@ -64,6 +73,13 @@ jobs:
           NTFY_SERVER: ${{ secrets.NTFY_SERVER }}
           PREVIOUS_STATUS_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/status.json
         run: npm run notify
+
+      - name: Send test notification
+        if: steps.schedule.outputs.skip != 'true' && github.event_name == 'workflow_dispatch' && inputs.test_notification == 'true'
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          NTFY_SERVER: ${{ secrets.NTFY_SERVER }}
+        run: npm run notify:test
 
       - name: Build site
         if: steps.schedule.outputs.skip != 'true'
